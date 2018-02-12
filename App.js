@@ -6,35 +6,53 @@
 
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  StatusBar
 } from 'react-native';
+import {fetchWeather} from './weather'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state ={
+      temp: 0,
+      humidity: 0
+
+    }
+  }
 
 
+  componentDidMount() {
+    this.getLocation()
+  }
 
-type Props = {};
-export default class App extends Component<Props> {
+  getLocation() {
+    navigator.geolocation.getCurrentPosition(
+    (posData) => fetchWeather(posData.coords.latitude,posData.coords.longitude)
+    .then(data => this.setState({
+      temp: data.temp,
+      humidity: data.humidity
+    })),
+    (error) => alert(error),
+    {timeout: 1000}
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
+      <StatusBar hidden={true}/>
+        <View style={styles.header}>
+        <Text style={styles.temp}>{this.state.humidity}</Text>
+          <Text style={styles.temp}>{this.state.temp}°</Text>
+        </View>
+        <View style={styles.body}>
+        <Text style={styles.temp}>
+          <Text style={{color: 'red'}}>Weather</Text> At Your Location
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+        </View>
       </View>
     );
   }
@@ -43,18 +61,26 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#FFD017'
+  },
+  header: {
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    // backgroundColor:'blue'
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  temp: {
+    fontFamily: 'HelveticaNeue-Bold',
+    fontSize: 45,
+    color: 'white'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  body: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // alignItems: 'flex-start',
+    flex: 1,
+    // backgroundColor:'red'
+  }
+})
