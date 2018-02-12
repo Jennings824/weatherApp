@@ -20,8 +20,8 @@ export default class App extends Component {
     super(props);
     this.state ={
       temp: 0,
-      humidity: 0
-
+      humidity: 0,
+      time: null
     }
   }
 
@@ -29,12 +29,14 @@ export default class App extends Component {
     this.getLocation()
   }
 
+
   getLocation() {
     navigator.geolocation.getCurrentPosition(
     (posData) => fetchWeather(posData.coords.latitude,posData.coords.longitude)
     .then(data => this.setState({
       temp: Math.round(data.temp),
-      humidity: data.humidity
+      humidity: data.humidity,
+      time: new Date().toLocaleString()
     })),
     (error) => alert(error),
     {timeout: 1000}
@@ -58,6 +60,7 @@ export default class App extends Component {
         <View style={styles.body}>
         <Text style={styles.temp}>Humidity: {this.state.humidity}</Text>
         <Text style={styles.temp}>Temp: {this.state.temp}° C</Text>
+        <Text>Updated: {this.state.time}</Text>
         </View>
         <View>
         </View>
