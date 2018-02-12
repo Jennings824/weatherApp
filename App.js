@@ -9,7 +9,9 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar
+  StatusBar,
+  Button,
+  Alert
 } from 'react-native';
 import {fetchWeather} from './weather'
 
@@ -23,7 +25,6 @@ export default class App extends Component {
     }
   }
 
-
   componentDidMount() {
     this.getLocation()
   }
@@ -32,7 +33,7 @@ export default class App extends Component {
     navigator.geolocation.getCurrentPosition(
     (posData) => fetchWeather(posData.coords.latitude,posData.coords.longitude)
     .then(data => this.setState({
-      temp: data.temp,
+      temp: Math.round(data.temp),
       humidity: data.humidity
     })),
     (error) => alert(error),
@@ -40,18 +41,25 @@ export default class App extends Component {
     )
   }
 
+  onPressButton() {
+    this.getLocation()
+
+  }
+
   render() {
     return (
       <View style={styles.container}>
       <StatusBar hidden={true}/>
         <View style={styles.header}>
-        <Text style={styles.temp}>{this.state.humidity}</Text>
-          <Text style={styles.temp}>{this.state.temp}°</Text>
+        <Text style={styles.temp}>
+        <Text style={{color: 'red'}}>Weather</Text> At Your Location
+        </Text>
         </View>
         <View style={styles.body}>
-        <Text style={styles.temp}>
-          <Text style={{color: 'red'}}>Weather</Text> At Your Location
-        </Text>
+        <Text style={styles.temp}>Humidity: {this.state.humidity}</Text>
+        <Text style={styles.temp}>Temp: {this.state.temp}° C</Text>
+        </View>
+        <View>
         </View>
       </View>
     );
@@ -80,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // alignItems: 'flex-start',
-    flex: 1,
+    flex: 2,
     // backgroundColor:'red'
   }
 })
