@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -29,7 +23,6 @@ export default class App extends Component {
     this.getLocation()
   }
 
-
   getLocation() {
     navigator.geolocation.getCurrentPosition(
     (posData) => fetchWeather(posData.coords.latitude,posData.coords.longitude)
@@ -43,9 +36,8 @@ export default class App extends Component {
     )
   }
 
-  onPressButton() {
+  onButtonPress = () => {
     this.getLocation()
-
   }
 
   render() {
@@ -53,16 +45,21 @@ export default class App extends Component {
       <View style={styles.container}>
       <StatusBar hidden={true}/>
         <View style={styles.header}>
-        <Text style={styles.temp}>
-        <Text style={{color: 'red'}}>Weather</Text> At Your Location
+          <Text style={styles.temp}>
+          <Text style={{color: 'red'}}>Weather</Text> At Your Location
         </Text>
         </View>
         <View style={styles.body}>
-        <Text style={styles.temp}>Humidity: {this.state.humidity}</Text>
-        <Text style={styles.temp}>Temp: {this.state.temp}° C</Text>
-        <Text>Updated: {this.state.time}</Text>
+          <Text style={styles.temp}>Humidity: {this.state.humidity}</Text>
+          <Text style={styles.temp}>Temp: {this.state.temp}° C</Text>
+          <Text>Updated: {this.state.time}</Text>
         </View>
         <View>
+          <Button
+            onPress={this.onButtonPress}
+            title="Refresh"
+            color="red"
+          />
         </View>
       </View>
     );
@@ -75,12 +72,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFD017'
   },
   header: {
-    alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    // backgroundColor:'blue'
   },
   temp: {
     fontFamily: 'HelveticaNeue-Bold',
@@ -90,8 +83,6 @@ const styles = StyleSheet.create({
   body: {
     alignItems: 'center',
     justifyContent: 'center',
-    // alignItems: 'flex-start',
     flex: 2,
-    // backgroundColor:'red'
   }
 })
